@@ -1,0 +1,9 @@
+.chat-message-list {
+  grid-area: chat-message-list;
+  display: flex;
+  flex-direction: column-reverse;
+  flex: 1 1;
+  padding: 0 20px;
+  overflow-y: scroll;
+  height: calc(100% - 51px);
+}

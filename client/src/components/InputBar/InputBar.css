@@ -1,0 +1,24 @@
+.chat-form {
+  display: grid;
+  grid-template-columns: 95% 5%;
+  align-content: center;
+  align-items: center;
+  grid-gap: 15px;
+  grid-area: chat-form;
+  border-radius: 0 0 10px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  padding-left: 22px;
+  padding-right: 42px;
+  height: 50px;
+  background: #eee;
+}
+
+.chat-form input {
+  outline: none;
+  height: 30px;
+  padding: 4px;
+  border: 2px solid #ddd;
+  color: #330;
+  border-radius: 6px;
+  font-size: 1rem;
+}
