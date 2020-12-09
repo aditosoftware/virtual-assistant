@@ -1,15 +1,28 @@
-FROM node:12
+FROM nginx:alpine
+EXPOSE 80
 
-# set working directory
-WORKDIR /usr/src/virtualAssistant/client
+COPY ./ /var/www/app
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./start.sh /start.sh
 
-COPY . ./
+RUN apk add npm
+ENV URL=http://localhost:80/api/
+
+WORKDIR /var/www/app
 RUN npm install --silent
-
-# build app
 RUN npm run build
 
-# remove unused files
-RUN rm -rf node_modules
-RUN rm -rf public
-RUN rm -rf src
+WORKDIR /var/www/
+RUN mkdir react/
+RUN mv app/build/* react/
+RUN rm app/ -Rf
+RUN rm /root/.npm/ -Rf
+RUN apk del c-ares libgcc libstdc++ libuv nodejs npm
+
+CMD /start.sh
+
+
+
+
+
+
