@@ -16,6 +16,7 @@ if (envFound.error) {
   throw new Error('Could not finde .env file!');
 }
 
+// TODO: map env variables from dockerfile
 module.exports = {
   port: process.env.PORT,
   projectId: process.env.PROJECTID,
