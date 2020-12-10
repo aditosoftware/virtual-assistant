@@ -4,7 +4,7 @@
 // * this following constants should only be changed if you know what you are doing
 
 const ADITO_SERVER_HOST = process.env.ADITO_SERVER_HOST; // host name of adito server
-const ADITO_SERVER_REST_SERVICE_PATH = 'services/rest'; // default path leading to adito rest webservices
+const ADITO_SERVER_REST_SERVICE_PATH = 'services/rest/'; // default path leading to adito rest webservices
 const ADITO_SERVER_VA_REST = 'virtualAssistant_rest'; // path to rest webservice to communicate dialogflows detected intent to adito
 const ADITO_SERVER_PICTURE_REST = 'virtualAssistantUserPicture_rest'; // path to rest webservice to get profile picture of an adito user
 const DIALOGFLOW_PROJECTID = process.env.DIALOGFLOW_PROJECTID; // id of the dialogflow project/agent
