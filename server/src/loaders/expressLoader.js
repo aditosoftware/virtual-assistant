@@ -2,7 +2,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const config = require('../config');
-const api = require('../api/index');
+const api = require('../api');
 
 module.exports = (app) => {
   // enable Cross Origin Resource Sharing to all origins by default
@@ -14,5 +14,5 @@ module.exports = (app) => {
   app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
   // load API routes
-  app.use(config.apiPrefix, api());
+  app.use(config.NODE_SERVER_API_PATH, api());
 };

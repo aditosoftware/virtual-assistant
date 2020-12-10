@@ -1,21 +1,21 @@
 const dialogflow = require('@google-cloud/dialogflow');
 const fs = require('fs');
 
-const config = require('../config/index.js');
+const config = require('../config');
 
 function createSession(aditoUserId) {
   // remove '_____USER_' of aditoUserId to get unique 36 byte id
   // if aditoUserId is null use new uuid
   const sessionId = aditoUserId.replace('_____USER_', '');
   const sessionClient = new dialogflow.SessionsClient();
-  const sessionPath = sessionClient.projectAgentSessionPath(config.projectId, sessionId);
+  const sessionPath = sessionClient.projectAgentSessionPath(config.DIALOGFLOW_PROJECTID, sessionId);
 
   return { sessionClient, sessionPath };
 }
 
 async function createRequest(sessionPath, message) {
   if (message.isAudioMessage) {
-    const path = config.audioPath + '/audio-' + message.aditoUserId + '.wav';
+    const path = config.NODE_SERVER_FS_AUDIO_PATH + '/audio-' + message.aditoUserId + '.wav';
     const base64InputAudio = fs.readFileSync(path).toString('base64'); // read audio file into inputAudio
     // remove audio file from file system after it got read
     fs.unlink(path, (err) => {
@@ -29,9 +29,9 @@ async function createRequest(sessionPath, message) {
       session: sessionPath,
       queryInput: {
         audioConfig: {
-          audioEncoding: config.audioEncoding,
-          sampleRateHertz: config.sampleRateHertz,
-          languageCode: config.langCode,
+          audioEncoding: config.DIALOGFLOW_AUDIO_ENCODING,
+          sampleRateHertz: config.DIALOGFLOW_SAMPLE_RATE_HERTZ,
+          languageCode: config.DIALOGFLOW_LANGUAGE_CODE,
         },
       },
       // user audio input
@@ -44,7 +44,7 @@ async function createRequest(sessionPath, message) {
         text: {
           // user text input
           text: message.messageText,
-          languageCode: config.langCode,
+          languageCode: config.DIALOGFLOW_LANGUAGE_CODE,
         },
       },
     };

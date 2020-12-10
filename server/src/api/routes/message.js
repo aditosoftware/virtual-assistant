@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 
-const config = require('../../config/index.js');
+const config = require('../../config');
 const distributionService = require('../../services/distribution');
 const Message = require('../../models/message');
 
@@ -18,7 +18,7 @@ module.exports = (app) => {
   // defines storage location and name of file
   let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, config.audioPath);
+      cb(null, config.NODE_SERVER_FS_AUDIO_PATH);
     },
     filename: function (req, file, cb) {
       let aditoUserId = JSON.parse(req.body.message).aditoUserId;

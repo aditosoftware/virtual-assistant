@@ -16,7 +16,9 @@ async function send(dialogflowResponse) {
   await (async () => {
     // TODO: replace with env variable ADITO_SERVER_HOST from dockerfile (map in config/index.js first)
     const { body } = await got.post(
-      config.aditoServerIp + config.aditoRestServicePath + config.aditoVirtualAssistantPath,
+      config.ADITO_SERVER_HOST +
+        config.ADITO_SERVER_REST_SERVICE_PATH +
+        config.ADITO_SERVER_VA_REST,
       {
         // TODO: change name and pw to ssp credentials
         username: aditoUserName,
@@ -43,7 +45,9 @@ async function getUserImage(aditoUserId) {
     try {
       // TODO: replace with env variable ADITO_SERVER_HOST from dockerfile (map in config/index.js first)
       const response = await got(
-        config.aditoServerIp + config.aditoRestServicePath + config.aditoUserPicturePath,
+        config.ADITO_SERVER_HOST +
+          config.ADITO_SERVER_REST_SERVICE_PATH +
+          config.ADITO_SERVER_PICTURE_REST,
         {
           searchParams: { id: aditoUserId },
           https: {

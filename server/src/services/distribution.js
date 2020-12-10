@@ -4,11 +4,11 @@ const textToSpeech = require('@google-cloud/text-to-speech');
 
 const aditoService = require('../services/adito');
 const dialogflowService = require('../services/dialogflow');
-const { assetsPath, langCode } = require('../config');
+const config = require('../config');
 const Message = require('../models/message');
 
 // get adito logo from assets and encode it in base64
-const botPic = base64_encode(`${assetsPath}/images/adito-logo.png`);
+const botPic = base64_encode(`${config.NODE_SERVER_FS_ASSETS_PATH}/images/adito-logo.png`);
 
 // create client for GCP text to speech API
 const textToSpeechClient = new textToSpeech.TextToSpeechClient();
@@ -37,7 +37,7 @@ async function responseToChatMessage(response) {
   // ? maybe create response model
   const textToSpeechReq = {
     input: { text: response.queryResult.fulfillmentText },
-    voice: { languageCode: langCode, ssmlGender: 'NEUTRAL' },
+    voice: { languageCode: config.DIALOGFLOW_LANGUAGE_CODE, ssmlGender: 'NEUTRAL' },
     audioConfig: { audioEncoding: 'LINEAR16' },
   };
   const [textToSpeechRes] = await textToSpeechClient.synthesizeSpeech(textToSpeechReq);
