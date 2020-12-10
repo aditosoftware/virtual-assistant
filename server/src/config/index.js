@@ -4,9 +4,9 @@
 // * this following constants should only be changed if you know what you are doing
 
 const ADITO_SERVER_HOST = process.env.ADITO_SERVER_HOST; // host name of adito server
-const ADITO_SERVER_REST_SERVICE_PATH = '/services/rest'; // default path leading to adito rest webservices
-const ADITO_SERVER_VA_REST = '/virtualAssistant_rest'; // path to rest webservice to communicate dialogflows detected intent to adito
-const ADITO_SERVER_PICTURE_REST = '/virtualAssistantUserPicture_rest'; // path to rest webservice to get profile picture of an adito user
+const ADITO_SERVER_REST_SERVICE_PATH = 'services/rest'; // default path leading to adito rest webservices
+const ADITO_SERVER_VA_REST = 'virtualAssistant_rest'; // path to rest webservice to communicate dialogflows detected intent to adito
+const ADITO_SERVER_PICTURE_REST = 'virtualAssistantUserPicture_rest'; // path to rest webservice to get profile picture of an adito user
 const DIALOGFLOW_PROJECTID = process.env.DIALOGFLOW_PROJECTID; // id of the dialogflow project/agent
 const DIALOGFLOW_LANGUAGE_CODE = process.env.DIALOGFLOW_LANGUAGECODE; // language code used in messages - check https://cloud.google.com/dialogflow/es/docs/reference/language for format and supported languages
 const DIALOGFLOW_AUDIO_ENCODING = 'AUDIO_ENCODING_LINEAR_16'; // audio encoding used for audio messages
