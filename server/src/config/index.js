@@ -13,7 +13,7 @@ var aditoUserPicturePath = '/virtualAssistantUserPicture_rest';
 
 if (envFound.error) {
   // * This error should crash the whole process
-  throw new Error('Could not finde .env file!');
+  throw new Error('Could not find .env file!');
 }
 
 // TODO: map env variables from dockerfile
