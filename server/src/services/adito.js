@@ -7,7 +7,7 @@ const config = require('../config');
 // ? does token auth also need webservice role for ADITO users?
 // TODO: refactor to token auth
 const aditoUserName = 'Admin';
-const aditoPassword = '';
+const aditoPassword = 'GB3gJYDfrOz6HVDAjWFe';
 
 // sends the dialogflowResponse to the adito webservice and returns the adito response
 async function send(dialogflowResponse) {
