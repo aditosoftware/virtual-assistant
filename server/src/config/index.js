@@ -1,27 +1,17 @@
-const dotenv = require('dotenv');
+const apiPrefix = '/api';
+const audioEncoding = 'AUDIO_ENCODING_LINEAR_16';
+const sampleRateHertz = '44100';
+const audioPath = './audio';
+const assetsPath = './assets';
+const aditoRestServicePath = '/services/rest';
+const aditoVirtualAssistantPath = '/virtualAssistant_rest';
+const aditoUserPicturePath = '/virtualAssistantUserPicture_rest';
 
-const envFound = dotenv.config();
-
-var apiPrefix = '/api';
-var audioEncoding = 'AUDIO_ENCODING_LINEAR_16';
-var sampleRateHertz = '44100';
-var audioPath = './audio';
-var assetsPath = './assets';
-var aditoRestServicePath = '/services/rest';
-var aditoVirtualAssistantPath = '/virtualAssistant_rest';
-var aditoUserPicturePath = '/virtualAssistantUserPicture_rest';
-
-if (envFound.error) {
-  // * This error should crash the whole process
-  throw new Error('Could not find .env file!');
-}
-
-// TODO: map env variables from dockerfile
 module.exports = {
-  port: process.env.PORT,
-  projectId: process.env.PROJECTID,
-  langCode: process.env.LANGUAGECODE,
-  aditoServerIp: process.env.ADITOSERVERIP,
+  port: process.env.NODE_SERVER_PORT,
+  projectId: process.env.DIALOGFLOW_PROJECTID,
+  langCode: process.env.DIALOGFLOW_LANGUAGECODE,
+  aditoServerIp: process.env.ADITO_SERVER_HOST,
   apiPrefix,
   audioEncoding,
   sampleRateHertz,

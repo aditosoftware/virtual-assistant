@@ -3,6 +3,8 @@ FROM node:12
 # setup environment variables
 ENV ADITO_SERVER_HOST=https://localhost:8443/
 ENV NODE_SERVER_PORT=5000
+ENV DIALOGFLOW_PROJECTID=chat-bot-poc-vjmdmo
+ENV DIALOGFLOW_LANGUAGECODE=de
 
 # set working directory
 WORKDIR /usr/src/virtualAssistant/server
