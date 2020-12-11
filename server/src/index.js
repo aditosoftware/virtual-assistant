@@ -6,6 +6,7 @@ const config = require('./config');
 async function startServer() {
   const app = express();
 
+  // splitting startup process into modules
   const loader = require('./loaders/index');
   await loader(app);
 
