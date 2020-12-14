@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:12-alpine
 
 # setup environment variables
 ENV ADITO_SERVER_HOST=https://localhost:8443
