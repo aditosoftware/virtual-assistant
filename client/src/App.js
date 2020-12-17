@@ -34,7 +34,7 @@ const App = () => {
   const aditoUserId = urlParams.get('user');
   const ttsEnabled = urlParams.get('ttsEnabled') === 'true'; // make sure to convert string to boolean
 
-  // TODO: replace localhost:5000 with node server address
+  // in start.sh localhost:5000 gets replaced with node server address
   const message = useAsync('http://localhost:5000/api/message');
   const image = useAsync('http://localhost:5000/api/picture?id=' + aditoUserId);
 

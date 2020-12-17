@@ -44,7 +44,7 @@ const Chat = ({ aditoUserId, aditoUserImage, message, setMessage, ttsEnabled }) 
     fd.append('audio', blobToFile(message.messageAudio, 'audio.wav'));
 
     axios
-      .post('http://localhost:5000/api/message', fd) // TODO: replace with node server address
+      .post('http://localhost:5000/api/message', fd) // in start.sh localhost:5000 gets replaced with node server address
       .then((res) => {
         // adding dialogflow response (already in chat message format) to messages
         setMessages((messages) => [...messages, res.data]);
