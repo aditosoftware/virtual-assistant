@@ -1,5 +1,4 @@
 const express = require('express');
-////const ngrok = require('ngrok');
 
 const config = require('./config');
 
@@ -17,14 +16,6 @@ async function startServer() {
     }
 
     console.log(`Server is listening on port ${config.NODE_SERVER_PORT}`);
-
-    // use ngrok to make localhost available to internet
-    ////(async function () {
-    ////const endpointUrl = await ngrok.connect(config.port);
-    ////console.log(
-    ////`Publicably accessible tunnel to localhost: ${config.port} is available on ${endpointUrl}`
-    ////);
-    ////})();
   });
 }
 
