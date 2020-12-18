@@ -4,6 +4,7 @@ const multer = require('multer');
 const config = require('../../config');
 const distributionService = require('../../services/distribution');
 const Message = require('../../models/message');
+const messageHelper = require('../../helpers/messageHelper');
 
 const router = express.Router();
 
@@ -37,6 +38,6 @@ module.exports = (app) => {
     const response = await distributionService.distribute(message);
 
     // returns the response in chat format
-    return res.status(200).json(await distributionService.responseToChatMessage(response));
+    return res.status(200).json(await messageHelper.toMessage(response));
   });
 };

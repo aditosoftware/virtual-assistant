@@ -1,12 +1,12 @@
 const express = require('express');
 
 const config = require('./config');
+const loader = require('./loaders/index');
 
 async function startServer() {
   const app = express();
 
   // splitting startup process into modules
-  const loader = require('./loaders/index');
   await loader(app);
 
   app.listen(config.NODE_SERVER_PORT, (err) => {
