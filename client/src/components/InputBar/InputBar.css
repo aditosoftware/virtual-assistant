@@ -5,20 +5,18 @@
   align-items: center;
   grid-gap: 15px;
   grid-area: chat-form;
-  border-radius: 0 0 10px 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.25);
-  padding-left: 22px;
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  padding-left: 10px;
   padding-right: 42px;
-  height: 50px;
-  background: #eee;
+  height: 47px;
+  background: #ffffff;
 }
 
 .chat-form input {
   outline: none;
-  height: 30px;
   padding: 4px;
-  border: 2px solid #ddd;
+  border: none;
   color: #330;
-  border-radius: 6px;
   font-size: 1rem;
 }
