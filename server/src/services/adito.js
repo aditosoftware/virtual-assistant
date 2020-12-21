@@ -10,8 +10,11 @@ const aditoUserName = 'Admin';
 const aditoPassword = 'GB3gJYDfrOz6HVDAjWFe';
 
 // sends the dialogflowResponse to the adito webservice and returns the adito response
-async function send(dialogflowResponse) {
+async function send(aditoUserId, dialogflowResponse) {
   let aditoResponse;
+
+  // add id of the calling adito user to the dialogflow response
+  dialogflowResponse.aditoUserId = aditoUserId;
 
   await (async () => {
     const { body } = await got.post(
