@@ -1,7 +1,10 @@
 const aditoService = require('../services/adito');
 const dialogflowService = require('../services/dialogflow');
+const Logger = require('../loaders/logger').LoggerInstance;
 
 async function distribute(message) {
+  Logger.debug(`Distribution Service called`);
+
   let response;
 
   // messages have to be sent to dialogflow to detect an intent

@@ -2,10 +2,10 @@ const dialogflow = require('@google-cloud/dialogflow');
 const fs = require('fs');
 
 const config = require('../config');
+const Logger = require('../loaders/logger').LoggerInstance;
 
 function createSession(aditoUserId) {
   // remove '_____USER_' of aditoUserId to get unique 36 byte id
-  // if aditoUserId is null use new uuid
   const sessionId = aditoUserId.replace('_____USER_', '');
   const sessionClient = new dialogflow.SessionsClient();
   const sessionPath = sessionClient.projectAgentSessionPath(config.DIALOGFLOW_PROJECTID, sessionId);
@@ -20,7 +20,7 @@ async function createRequest(sessionPath, message) {
     // remove audio file from file system after it got read
     fs.unlink(path, (err) => {
       if (err) {
-        console.error(err);
+        Logger.error(err);
         return;
       }
     });
@@ -56,16 +56,23 @@ async function sendRequest(sessionClient, request) {
   // * but it returns an array in this form: [ object(DetectIntentResponse), null, null]
   // * adito webservice expects JSON format so this does not work with array at the beginning
   // * can't find anything useful what the array and the last two values are used for, therefor remove them and work with the DetectIntentResponse
-  const dialogflowResponseArr = await sessionClient.detectIntent(await request);
-  const dialogflowResponse = dialogflowResponseArr[0];
-  console.log(dialogflowResponse);
-  return dialogflowResponse;
+  try {
+    const dialogflowResponseArr = await sessionClient.detectIntent(await request);
+    const dialogflowResponse = dialogflowResponseArr[0];
+    Logger.debug(`Dialogflow Response received`);
+    return dialogflowResponse;
+  } catch (err) {
+    Logger.error(err);
+    return;
+  }
 }
 
 function getDialogflowResponse(message) {
   const { sessionClient, sessionPath } = createSession(message.aditoUserId);
+  Logger.debug(`Dialogflow Session created`);
 
   const request = createRequest(sessionPath, message);
+  Logger.debug(`Dialogflow Request created`);
 
   return sendRequest(sessionClient, request);
 }

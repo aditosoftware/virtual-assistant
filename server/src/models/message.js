@@ -35,6 +35,14 @@ class Message {
       }
     }
   }
+
+  // * checks if the given message is valid and therefore usable for the virtual assistant
+  isValid() {
+    if (!this.aditoUserId) {
+      return false;
+    }
+    return true;
+  }
 }
 
 module.exports = Message;
