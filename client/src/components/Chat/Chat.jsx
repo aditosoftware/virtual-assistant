@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import axios from 'axios';
+import { trackPromise } from 'react-promise-tracker'
 
 import MessageList from '../MessageList/MessageList';
 import InputBar from '../InputBar/InputBar';
@@ -43,7 +44,7 @@ const Chat = ({ aditoUserId, aditoUserImage, message, setMessage, ttsEnabled }) 
     fd.append('message', JSON.stringify(message));
     fd.append('audio', blobToFile(message.messageAudio, 'audio.wav'));
 
-    axios
+    trackPromise(axios
       .post('http://localhost:5000/api/message', fd) // in start.sh localhost:5000 gets replaced with node server address
       .then((res) => {
         // adding dialogflow response (already in chat message format) to messages
@@ -52,7 +53,7 @@ const Chat = ({ aditoUserId, aditoUserImage, message, setMessage, ttsEnabled }) 
       })
       .catch((err) => {
         console.log(err);
-      });
+      }));
 
     setMessage({
       imageUrl: '',
