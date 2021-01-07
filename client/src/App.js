@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import Chat from './components/Chat/Chat';
+import StartupIndicator from './components/StartupIndicator/StartupIndicator';
 
 function useAsync(url) {
   const [value, setValue] = useState(null);
@@ -42,7 +43,7 @@ const App = () => {
   if (image.error) return `Failed to load user image from server: ${image.error}`;
 
   return message.loading || image.loading ? (
-    'Loading message model and user image...'
+    <StartupIndicator />
   ) : (
     <Chat
       aditoUserId={aditoUserId}
