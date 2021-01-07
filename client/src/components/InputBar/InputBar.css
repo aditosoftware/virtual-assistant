@@ -1,6 +1,6 @@
 .chat-form {
   display: grid;
-  grid-template-columns: 95% 5%;
+  grid-template-columns: auto 5px;
   align-content: center;
   align-items: center;
   grid-gap: 15px;
