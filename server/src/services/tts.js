@@ -6,7 +6,7 @@ const Logger = require('../loaders/logger').LoggerInstance;
 const textToSpeechClient = new textToSpeech.TextToSpeechClient();
 
 async function exec(text) {
-  Logger.debug('TTS is called with Text: ' + text);
+  Logger.debug('TTS: ' + text);
 
   const textToSpeechReq = {
     input: { text: text },

@@ -12,7 +12,7 @@ const aditoPassword = 'GB3gJYDfrOz6HVDAjWFe';
 
 // sends the dialogflowResponse to the adito webservice and returns the adito response
 async function send(aditoUserId, dialogflowResponse) {
-  let aditoResponse;
+  let aditoResponse = null;
 
   // add id of the calling adito user to the dialogflow response
   dialogflowResponse.aditoUserId = aditoUserId;
@@ -35,7 +35,13 @@ async function send(aditoUserId, dialogflowResponse) {
       );
       aditoResponse = body;
     })();
-    Logger.debug(`ADITO VA-Webservice Response received`);
+    Logger.debug(
+      'ADITO Service: POST ' +
+        config.ADITO_SERVER_HOST +
+        config.ADITO_SERVER_REST_SERVICE_PATH +
+        config.ADITO_SERVER_VA_REST
+    );
+    Logger.debug('ADITO Service: Response received');
     return aditoResponse;
   } catch (err) {
     Logger.error(err);
@@ -87,7 +93,12 @@ async function getUserImage(aditoUserId) {
           }
         );
         aditoUserImage = response.body;
-        Logger.debug(`ADITO Picture Webservice received`);
+        Logger.debug(
+          'ADITO Service: GET ' +
+            config.ADITO_SERVER_HOST +
+            config.ADITO_SERVER_REST_SERVICE_PATH +
+            config.ADITO_SERVER_PICTURE_REST
+        );
       } catch (error) {
         console.log(error);
       }

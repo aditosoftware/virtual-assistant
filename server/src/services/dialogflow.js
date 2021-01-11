@@ -74,6 +74,7 @@ function getDialogflowResponse(message) {
   const request = createRequest(sessionPath, message);
   Logger.debug(`Dialogflow Request created`);
 
+  Logger.debug(`Dialogflow Request sent`);
   return sendRequest(sessionClient, request);
 }
 
