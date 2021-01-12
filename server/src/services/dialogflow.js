@@ -30,7 +30,6 @@ async function createRequest(sessionPath, message) {
       queryInput: {
         audioConfig: {
           audioEncoding: config.DIALOGFLOW_AUDIO_ENCODING,
-          sampleRateHertz: config.DIALOGFLOW_SAMPLE_RATE_HERTZ,
           languageCode: config.DIALOGFLOW_LANGUAGE_CODE,
         },
       },
