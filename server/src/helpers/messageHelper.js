@@ -21,24 +21,24 @@ async function toMessage(response) {
 
   try {
     [textToSpeechRes] = await tts.exec(response.queryResult.fulfillmentText);
+    // TODO: add file/line indicator to error logs
+    let data = {
+      imageUrl: `data:image/png;base64,${botPic}`,
+      imageAlt: 'bot',
+      messageText: response.queryResult.fulfillmentText,
+      messageAudio: textToSpeechRes.audioContent,
+      isMyMessage: false,
+      queryText: response.queryResult.queryText,
+      createdAt: moment().format('HH:mm'),
+    };
+
+    let message = new Message();
+    message.initModel(data);
+
+    return message;
   } catch (err) {
     Logger.error(err);
   }
-
-  let data = {
-    imageUrl: `data:image/png;base64,${botPic}`,
-    imageAlt: 'bot',
-    messageText: response.queryResult.fulfillmentText,
-    messageAudio: textToSpeechRes.audioContent,
-    isMyMessage: false,
-    queryText: response.queryResult.queryText,
-    createdAt: moment().format('HH:mm'),
-  };
-
-  let message = new Message();
-  message.initModel(data);
-
-  return message;
 }
 
 module.exports = {

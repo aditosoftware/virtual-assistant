@@ -10,11 +10,14 @@ function createSession(aditoUserId) {
   const sessionId = aditoUserId.replace('_____USER_', '');
   const sessionClient = new dialogflow.SessionsClient();
   const sessionPath = sessionClient.projectAgentSessionPath(config.DIALOGFLOW_PROJECTID, sessionId);
+  Logger.debug(`Dialogflow Session created`);
 
   return { sessionClient, sessionPath };
 }
 
 async function createRequest(sessionPath, message) {
+  let dialogflowRequest = null;
+
   if (message.isAudioMessage) {
     const path = config.NODE_SERVER_FS_AUDIO_PATH + '/audio-' + message.aditoUserId + '.wav';
     const base64InputAudio = fs.readFileSync(path).toString('base64'); // read audio file into inputAudio
@@ -26,7 +29,7 @@ async function createRequest(sessionPath, message) {
       }
     });
 
-    return {
+    dialogflowRequest = {
       session: sessionPath,
       queryInput: {
         audioConfig: {
@@ -38,7 +41,7 @@ async function createRequest(sessionPath, message) {
       inputAudio: base64InputAudio,
     };
   } else {
-    return {
+    dialogflowRequest = {
       session: sessionPath,
       queryInput: {
         text: {
@@ -49,6 +52,32 @@ async function createRequest(sessionPath, message) {
       },
     };
   }
+
+  Logger.debug(`Dialogflow Request created`);
+  return dialogflowRequest;
+}
+
+function createEventRequest(sessionPath, event) {
+  let dialogflowRequest = null;
+
+  switch (event) {
+    case 'ADITO_TUTORIAL':
+      dialogflowRequest = {
+        session: sessionPath,
+        queryInput: {
+          event: {
+            name: event,
+            languageCode: config.DIALOGFLOW_LANGUAGE_CODE,
+          },
+        },
+      };
+      break;
+    default:
+      Logger.error('This custom event is not implemented');
+  }
+
+  Logger.debug('Dialogflow Request created');
+  return dialogflowRequest;
 }
 
 async function sendRequest(sessionClient, request) {
@@ -56,11 +85,13 @@ async function sendRequest(sessionClient, request) {
   // * but it returns an array in this form: [ object(DetectIntentResponse), null, null]
   // * adito webservice expects JSON format so this does not work with array at the beginning
   // * can't find anything useful what the array and the last two values are used for, therefor remove them and work with the DetectIntentResponse
+  let dialogflowResponse = new Response();
+
   try {
+    Logger.debug('Dialogflow Request sending');
     const dialogflowResponseArr = await sessionClient.detectIntent(await request);
-    let dialogflowResponse = new Response();
-    dialogflowResponse.initModel(dialogflowResponseArr[0]);
     Logger.debug(`Dialogflow Response received`);
+    dialogflowResponse.initModel(dialogflowResponseArr[0]);
     return dialogflowResponse;
   } catch (err) {
     Logger.error(err);
@@ -70,15 +101,17 @@ async function sendRequest(sessionClient, request) {
 
 function getDialogflowResponse(message) {
   const { sessionClient, sessionPath } = createSession(message.aditoUserId);
-  Logger.debug(`Dialogflow Session created`);
-
   const request = createRequest(sessionPath, message);
-  Logger.debug(`Dialogflow Request created`);
+  return sendRequest(sessionClient, request);
+}
 
-  Logger.debug(`Dialogflow Request sent`);
+function triggerDialogflowEvent(aditoUserId, event) {
+  const { sessionClient, sessionPath } = createSession(aditoUserId);
+  const request = createEventRequest(sessionPath, event);
   return sendRequest(sessionClient, request);
 }
 
 module.exports = {
   getDialogflowResponse,
+  triggerDialogflowEvent,
 };

@@ -9,7 +9,7 @@ import { playOutput, toArrayBuffer, blobToFile } from '../../utils';
 
 import './Chat.css';
 
-const Chat = ({ aditoUserId, aditoUserImage, message, setMessage, ttsEnabled }) => {
+const Chat = ({ aditoUserId, aditoUserImage, message, setMessage, ttsEnabled, tutorialEnabled }) => {
   const [messages, setMessages] = useState([]);
   const [iconType, setIconType] = useState('audio');
   const [, forceUpdate] = useReducer((x) => x + 1, 0); // used to force update in useEffect to refresh to display audio message as text
@@ -25,6 +25,21 @@ const Chat = ({ aditoUserId, aditoUserImage, message, setMessage, ttsEnabled }) 
       }
     }
   }, [messages]);
+
+  useEffect(() => {
+    // runs only if tutorialEnabled or aditoUserId changes (basically once on startup)
+    if (tutorialEnabled) {
+      // trigger dialogflow custom event ADITO_TUTORIAL through GET /tutorial
+      // add response to messages
+      trackPromise(axios({
+        method: 'post',
+        url: 'http://localhost:5000/api/tutorial',
+        data: { aditoUserId: aditoUserId, event: 'ADITO_TUTORIAL' }
+      }).then((res) => {
+        setMessages((messages) => [...messages, res.data]);
+      }))
+    }
+  }, [tutorialEnabled, aditoUserId]);
 
   const sendMessage = async (event) => {
     if (event) event.preventDefault();
