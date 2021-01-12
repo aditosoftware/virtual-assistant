@@ -4,6 +4,7 @@ const multer = require('multer');
 const config = require('../../config');
 const distributionService = require('../../services/distribution');
 const Message = require('../../models/message');
+const Response = require('../../models/response');
 const messageHelper = require('../../helpers/messageHelper');
 const Logger = require('../../loaders/logger').LoggerInstance;
 
@@ -46,7 +47,8 @@ module.exports = (app) => {
 
     if (message.isValid()) {
       try {
-        const response = await distributionService.distribute(message);
+        let response = new Response();
+        response.initModel(await distributionService.distribute(message));
         // returns the response in chat format
         return res.status(200).json(await messageHelper.toMessage(response));
       } catch (e) {

@@ -1,15 +1,17 @@
 const aditoService = require('../services/adito');
 const dialogflowService = require('../services/dialogflow');
+const Response = require('../models/response');
 const Logger = require('../loaders/logger').LoggerInstance;
 
 async function distribute(message) {
   Logger.debug(`Distribution Service called`);
 
-  let response;
+  let response = new Response();
 
   // messages have to be sent to dialogflow to detect an intent
   // depending on the intent received: send dialogflowResponse back to chat app or to adito webservice
-  const dialogflowResponse = await dialogflowService.getDialogflowResponse(message);
+  let dialogflowResponse = new Response();
+  dialogflowResponse.initModel(await dialogflowService.getDialogflowResponse(message));
 
   // * send intent to adito webservice if intent is 'adito_'-intent and all required params are present
   if (
@@ -17,7 +19,7 @@ async function distribute(message) {
     dialogflowResponse.queryResult.intent.displayName.startsWith('adito_') &&
     dialogflowResponse.queryResult.allRequiredParamsPresent
   ) {
-    response = await aditoService.send(message.aditoUserId, dialogflowResponse);
+    response.initModel(await aditoService.send(message.aditoUserId, dialogflowResponse));
   } else {
     if (!dialogflowResponse.queryResult.intent && !dialogflowResponse.queryResult.fulfillmentText) {
       dialogflowResponse.queryResult.fulfillmentText =

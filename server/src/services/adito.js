@@ -1,5 +1,6 @@
 const got = require('got');
 
+const Response = require('../models/response');
 const config = require('../config');
 const Logger = require('../loaders/logger').LoggerInstance;
 
@@ -12,7 +13,7 @@ const aditoPassword = 'GB3gJYDfrOz6HVDAjWFe';
 
 // sends the dialogflowResponse to the adito webservice and returns the adito response
 async function send(aditoUserId, dialogflowResponse) {
-  let aditoResponse = null;
+  let aditoResponse = new Response();
 
   // add id of the calling adito user to the dialogflow response
   dialogflowResponse.aditoUserId = aditoUserId;
@@ -33,7 +34,7 @@ async function send(aditoUserId, dialogflowResponse) {
           },
         }
       );
-      aditoResponse = body;
+      aditoResponse.initModel(body);
     })();
     Logger.debug(
       'ADITO Service: POST ' +
@@ -45,19 +46,27 @@ async function send(aditoUserId, dialogflowResponse) {
     return aditoResponse;
   } catch (err) {
     Logger.error(err);
-    // TODO: this is ugly - should refactor to own response object or a wrapper for dialogflow/adito response
-    // ! have to change asap if token auth gets implemented
     // ? 401 should not occur with token auth
-    let errResponse = {
+    let errResponse = new Response();
+    let data = {
+      responseId: null,
+      languageCode: config.DIALOGFLOW_LANGUAGE_CODE,
+      aditoUserId: dialogflowResponse.aditoUserId,
       queryResult: {
         queryText: dialogflowResponse.queryResult.queryText,
+        parameters: null,
+        allRequiredParamsPresent: true,
         fulfillmentText:
           'Es ist ein Fehler aufgetreten - Fehlercode: ' +
           err.response.statusCode +
           ' - bitte kontaktieren Sie einen Administrator',
-        aditoUserId: dialogflowResponse.aditoUserId,
+        intent: {
+          name: null,
+          displayName: null,
+        },
       },
     };
+    errResponse.initModel(data);
     switch (err.response.statusCode) {
       case 401:
         // username/password not correct

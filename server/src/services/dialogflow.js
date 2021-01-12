@@ -2,6 +2,7 @@ const dialogflow = require('@google-cloud/dialogflow');
 const fs = require('fs');
 
 const config = require('../config');
+const Response = require('../models/response');
 const Logger = require('../loaders/logger').LoggerInstance;
 
 function createSession(aditoUserId) {
@@ -57,7 +58,8 @@ async function sendRequest(sessionClient, request) {
   // * can't find anything useful what the array and the last two values are used for, therefor remove them and work with the DetectIntentResponse
   try {
     const dialogflowResponseArr = await sessionClient.detectIntent(await request);
-    const dialogflowResponse = dialogflowResponseArr[0];
+    let dialogflowResponse = new Response();
+    dialogflowResponse.initModel(dialogflowResponseArr[0]);
     Logger.debug(`Dialogflow Response received`);
     return dialogflowResponse;
   } catch (err) {
