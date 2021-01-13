@@ -11,6 +11,10 @@
 # production
 */build
 
+# logs
+*/combined.log
+*/error.log
+
 # misc
 */.DS_Store
 */.env
