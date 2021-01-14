@@ -1,11 +1,12 @@
 .startup-indicator-content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .startup-indicator-message {
   font-size: 1rem;
+
   color: #777;
 }

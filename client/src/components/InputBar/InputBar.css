@@ -1,24 +1,29 @@
 .chat-form {
   display: grid;
-  grid-template-columns: auto 5px;
-  align-content: center;
-  align-items: center;
   grid-gap: 15px;
   grid-area: chat-form;
-  border-radius: 10px;
-  border: 2px solid rgba(0, 0, 0, 0.1);
+  grid-template-columns: auto 5px;
+  align-items: center;
+  align-content: center;
+
+  height: 47px;
+
   padding-left: 10px;
   padding-right: 42px;
-  height: 47px;
-  background: #ffffff;
+  border-radius: 10px;
+
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
 }
 
 .chat-form input {
-  outline: none;
   padding: 4px;
-  border: none;
-  color: #330;
   font-size: 1rem;
+
+  color: #330;
+  border: none;
+
+  outline: none;
 }
 
 .record-indicator-container {
@@ -27,19 +32,22 @@
 
 .record-indicator {
   float: left;
+
   animation: blinker 0.7s cubic-bezier(0.5, 0, 1, 1) infinite alternate;
 }
 
 .record-indicator-counter {
-  float: left;
   padding-left: 7px;
   padding-top: 3.5px;
+
+  float: left;
 }
 
 @keyframes blinker {
   from {
     opacity: 0.9;
   }
+
   to {
     opacity: 0;
   }
