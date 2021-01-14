@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import IconButton from '@material-ui/core/IconButton';
 import MediaStreamRecorder, { StereoAudioRecorder } from 'msr';
+import IconButton from '@material-ui/core/IconButton'
 
 import InputIcon from '../InputIcon/InputIcon';
+import RecordIndicator from '../RecordIndicator/RecordIndicator';
+import RecordTimeCounter from '../RecordTimeCounter/RecordTimeCounter';
 
 import './InputBar.css';
 
@@ -65,17 +67,22 @@ const InputBar = ({ message, setMessage, sendMessage, iconType, setIconType }) =
 
   return (
     <form className="chat-form">
+      {isRecording ? 
+      <div className="record-indicator-container">
+        <div className="record-indicator"><RecordIndicator /></div>
+        <div className="record-indicator-counter"><RecordTimeCounter/></div>
+      </div> : 
       <input
         className="input"
         type="text"
-        placeholder="Schreibe eine Nachricht..."
+        placeholder={!isRecording ? "Schreibe eine Nachricht..." : ""}
         value={message.messageText || ''}
         onChange={handleChange}
         onKeyPress={(event) =>
           event.key === 'Enter' && message.messageText ? sendMessage(event) : null
         }
         disabled={isRecording}
-      />
+      />}
       <IconButton
         className="input-button"
         type="submit"

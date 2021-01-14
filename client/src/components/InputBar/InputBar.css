@@ -20,3 +20,27 @@
   color: #330;
   font-size: 1rem;
 }
+
+.record-indicator-container {
+  overflow: hidden;
+}
+
+.record-indicator {
+  float: left;
+  animation: blinker 0.7s cubic-bezier(0.5, 0, 1, 1) infinite alternate;
+}
+
+.record-indicator-counter {
+  float: left;
+  padding-left: 7px;
+  padding-top: 3.5px;
+}
+
+@keyframes blinker {
+  from {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 0;
+  }
+}
