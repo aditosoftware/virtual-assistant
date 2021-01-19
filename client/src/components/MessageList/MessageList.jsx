@@ -5,12 +5,12 @@ import WritingIndicator from '../WritingIndicator/WritingIndicator';
 
 import './MessageList.css';
 
-const MessageList = ({ messages }) => {
+const MessageList = ({ messages, ttsEnabled, isPlaying, setIsPlaying }) => {
   const messageItems = messages
     .slice(0)
     .reverse()
     .map((message, index) => {
-      return <Message key={index} message={message} />;
+      return <Message key={index} message={message} ttsEnabled={ttsEnabled} isPlaying={isPlaying} setIsPlaying={setIsPlaying} />;
     });
 
   return <div className="chat-message-list"><WritingIndicator/>{messageItems}</div>;

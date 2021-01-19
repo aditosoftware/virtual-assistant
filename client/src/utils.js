@@ -1,18 +1,17 @@
 function playOutput(arrayBuffer) {
   let audioContext = new AudioContext();
-  let outputSource;
+  let outputSource = audioContext.createBufferSource();
   try {
     if (arrayBuffer.byteLength > 0) {
       audioContext.decodeAudioData(
         arrayBuffer,
-        function (buffer) {
+        (buffer) => {
           audioContext.resume();
-          outputSource = audioContext.createBufferSource();
           outputSource.connect(audioContext.destination);
           outputSource.buffer = buffer;
           outputSource.start(0);
         },
-        function () {
+        () => {
           console.log(arguments);
         }
       );

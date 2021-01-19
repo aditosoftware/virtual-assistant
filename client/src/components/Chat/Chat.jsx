@@ -13,6 +13,7 @@ const Chat = ({ aditoUserId, aditoUserImage, message, setMessage, ttsEnabled, tu
   const [messages, setMessages] = useState([]);
   const [iconType, setIconType] = useState('audio');
   const [, forceUpdate] = useReducer((x) => x + 1, 0); // used to force update in useEffect to refresh to display audio message as text
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     let lastBotMsg = messages[messages.length - 1];
@@ -64,6 +65,7 @@ const Chat = ({ aditoUserId, aditoUserImage, message, setMessage, ttsEnabled, tu
       .then((res) => {
         // adding dialogflow response (already in chat message format) to messages
         setMessages((messages) => [...messages, res.data]);
+        // TODO: move auto tts to PlayPauseButton.jsx
         if (ttsEnabled) playOutput(toArrayBuffer(res.data.messageAudio.data));
       })
       .catch((err) => {
@@ -87,7 +89,7 @@ const Chat = ({ aditoUserId, aditoUserImage, message, setMessage, ttsEnabled, tu
 
   return (
     <div className="chat-container">
-      <MessageList messages={messages} />
+      <MessageList messages={messages} ttsEnabled={ttsEnabled} isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
       <InputBar
         message={message}
         setMessage={setMessage}
