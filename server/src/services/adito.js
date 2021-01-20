@@ -4,15 +4,8 @@ const Response = require('../models/response');
 const config = require('../config');
 const Logger = require('../loaders/logger').LoggerInstance;
 
-// * ADITO user name and password - used for http basic auth
-// ! hardcoded default admin credentials - will get replaced by token auth
-// ? does token auth also need webservice role for ADITO users?
-// TODO: refactor to token auth
-const aditoUserName = 'Admin';
-const aditoPassword = 'GB3gJYDfrOz6HVDAjWFe';
-
 // sends the dialogflowResponse to the adito webservice and returns the adito response
-async function send(aditoUserId, dialogflowResponse) {
+async function send(aditoUserId, usertoken, dialogflowResponse) {
   let aditoResponse = new Response();
 
   // add id of the calling adito user to the dialogflow response
@@ -20,20 +13,22 @@ async function send(aditoUserId, dialogflowResponse) {
 
   try {
     await (async () => {
-      const { body } = await got.post(
+      const url =
         config.ADITO_SERVER_HOST +
-          config.ADITO_SERVER_REST_SERVICE_PATH +
-          config.ADITO_SERVER_VA_REST,
-        {
-          username: aditoUserName,
-          password: aditoPassword,
-          json: dialogflowResponse,
-          responseType: 'json',
-          https: {
-            rejectUnauthorized: false,
-          },
-        }
-      );
+        config.ADITO_SERVER_REST_SERVICE_PATH +
+        config.ADITO_SERVER_VA_REST;
+
+      const { body } = await got.post(url, {
+        headers: {
+          authMethod: 'Method_usertoken',
+          tokenid: usertoken,
+        },
+        json: dialogflowResponse,
+        responseType: 'json',
+        https: {
+          rejectUnauthorized: false,
+        },
+      });
       aditoResponse.initModel(body);
     })();
     Logger.debug(
@@ -89,18 +84,18 @@ async function getUserImage(aditoUserId) {
 
   try {
     await (async () => {
+      const url =
+        config.ADITO_SERVER_HOST +
+        config.ADITO_SERVER_REST_SERVICE_PATH +
+        config.ADITO_SERVER_PICTURE_REST;
+
       try {
-        const response = await got(
-          config.ADITO_SERVER_HOST +
-            config.ADITO_SERVER_REST_SERVICE_PATH +
-            config.ADITO_SERVER_PICTURE_REST,
-          {
-            searchParams: { id: aditoUserId },
-            https: {
-              rejectUnauthorized: false,
-            },
-          }
-        );
+        const response = await got(url, {
+          searchParams: { id: aditoUserId },
+          https: {
+            rejectUnauthorized: false,
+          },
+        });
         aditoUserImage = response.body;
         Logger.debug(
           'ADITO Service: GET ' +

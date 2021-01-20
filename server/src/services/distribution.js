@@ -19,7 +19,9 @@ async function distribute(message) {
     dialogflowResponse.queryResult.intent.displayName.startsWith('adito_') &&
     dialogflowResponse.queryResult.allRequiredParamsPresent
   ) {
-    response.initModel(await aditoService.send(message.aditoUserId, dialogflowResponse));
+    response.initModel(
+      await aditoService.send(message.aditoUserId, message.usertoken, dialogflowResponse)
+    );
   } else {
     if (!dialogflowResponse.queryResult.intent && !dialogflowResponse.queryResult.fulfillmentText) {
       dialogflowResponse.queryResult.fulfillmentText =

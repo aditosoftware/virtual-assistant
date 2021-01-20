@@ -35,6 +35,7 @@ const App = () => {
   const aditoUserId = urlParams.get('user');
   const ttsEnabled = urlParams.get('ttsEnabled') === 'true'; // make sure to convert string to boolean
   const tutorialEnabled = urlParams.get('tutorialEnabled') === 'true'; // make sure to convert string to boolean
+  const usertoken = urlParams.get('usertoken');
 
   // in start.sh localhost:5000 gets replaced with node server address
   const message = useAsync('http://localhost:5000/api/message');
@@ -53,6 +54,7 @@ const App = () => {
       setMessage={message.setValue}
       ttsEnabled={ttsEnabled}
       tutorialEnabled={tutorialEnabled}
+      usertoken={usertoken}
     />
   );
 };

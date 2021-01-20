@@ -9,7 +9,7 @@ import { playOutput, toArrayBuffer, blobToFile } from '../../utils';
 
 import './Chat.css';
 
-const Chat = ({ aditoUserId, aditoUserImage, message, setMessage, ttsEnabled, tutorialEnabled }) => {
+const Chat = ({ aditoUserId, aditoUserImage, message, setMessage, ttsEnabled, tutorialEnabled, usertoken }) => {
   const [messages, setMessages] = useState([]);
   const [iconType, setIconType] = useState('audio');
   const [, forceUpdate] = useReducer((x) => x + 1, 0); // used to force update in useEffect to refresh to display audio message as text
@@ -50,6 +50,7 @@ const Chat = ({ aditoUserId, aditoUserImage, message, setMessage, ttsEnabled, tu
     messageInstance.imageUrl = `data:image/png;base64,${aditoUserImage.image}`;
     messageInstance.imageAlt = 'user';
     messageInstance.aditoUserId = aditoUserId;
+    messageInstance.usertoken = usertoken;
     setMessage(messageInstance);
 
     // audio message
@@ -82,6 +83,7 @@ const Chat = ({ aditoUserId, aditoUserImage, message, setMessage, ttsEnabled, tu
       isMyMessage: null,
       isAudioMessage: null,
       queryText: '',
+      usertoken: usertoken,
     });
 
     setIconType('audio');
