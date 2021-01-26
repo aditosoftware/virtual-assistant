@@ -64,9 +64,8 @@ async function send(aditoUserId, usertoken, dialogflowResponse) {
     errResponse.initModel(data);
     switch (err.response.statusCode) {
       case 401:
-        // username/password not correct
         errResponse.queryResult.fulfillmentText =
-          'Bitte überprüfe deinen Anmeldedaten - Benutzername oder Passwort sind falsch';
+          'Anfrage an ADITO-Server aufgrund fehlender oder ungültiger Authentifizierung abgelehnt';
         break;
       case 403:
         // user does not have adito webservice role

@@ -60,21 +60,15 @@ async function createRequest(sessionPath, message) {
 function createEventRequest(sessionPath, event) {
   let dialogflowRequest = null;
 
-  switch (event) {
-    case 'ADITO_TUTORIAL':
-      dialogflowRequest = {
-        session: sessionPath,
-        queryInput: {
-          event: {
-            name: event,
-            languageCode: config.DIALOGFLOW_LANGUAGE_CODE,
-          },
-        },
-      };
-      break;
-    default:
-      Logger.error('This custom event is not implemented');
-  }
+  dialogflowRequest = {
+    session: sessionPath,
+    queryInput: {
+      event: {
+        name: event,
+        languageCode: config.DIALOGFLOW_LANGUAGE_CODE,
+      },
+    },
+  };
 
   Logger.debug('Dialogflow Request created');
   return dialogflowRequest;
@@ -91,8 +85,14 @@ async function sendRequest(sessionClient, request) {
     Logger.debug('Dialogflow Request sending');
     const dialogflowResponseArr = await sessionClient.detectIntent(await request);
     Logger.debug(`Dialogflow Response received`);
-    dialogflowResponse.initModel(dialogflowResponseArr[0]);
-    return dialogflowResponse;
+
+    if (dialogflowResponseArr[0].queryResult.intent) {
+      dialogflowResponse.initModel(dialogflowResponseArr[0]);
+      return dialogflowResponse;
+    } else {
+      Logger.debug('Dialogflow could not match an intent to the request');
+      return null;
+    }
   } catch (err) {
     Logger.error(err);
     return;

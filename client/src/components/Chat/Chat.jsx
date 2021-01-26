@@ -21,7 +21,7 @@ const Chat = ({ aditoUserId, aditoUserImage, message, setMessage, ttsEnabled, tu
     if (lastBotMsg && lastBotMsg.queryText) {
       let lastUserMsg = messages[messages.length - 2];
       if (lastUserMsg) {
-        lastUserMsg.messageText = lastBotMsg.queryText;
+        lastBotMsg.queryText === 'ADITO_FALLBACK' ? lastUserMsg.messageText = '...' : lastUserMsg.messageText = lastBotMsg.queryText;
         forceUpdate();
       }
     }
