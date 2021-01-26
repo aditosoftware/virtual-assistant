@@ -93,15 +93,17 @@ const InputBar = ({ message, setMessage, sendMessage, iconType, setIconType }) =
               sendMessage(event);
               break;
             case 'audio':
-              if (isRecording) {
+              if (isRecording && recorder) {
                 // * stop recording - triggers ondataavailable
                 setIsRecording(false);
                 recorder.stop(); // stops mediastreamrecorder
 
-                localStream.getTracks().forEach((track) => {
-                  track.stop(); // stops capturing request (red dot in browser tab bar)
-                });
-                setLocalStream(null);
+                if (localStream) {
+                  localStream.getTracks().forEach((track) => {
+                    track.stop(); // stops capturing request (red dot in browser tab bar)
+                  });
+                  setLocalStream(null);
+                }
               } else if (!isRecording) {
                 // * start recording
                 setIsRecording(true);

@@ -58,7 +58,9 @@ module.exports = (app) => {
           .send({ message: 'Server error while distributing message to corresponding Services' });
       }
     } else {
-      return res.status(400).send({ message: 'ADITO User ID of the message sent is not valid' });
+      return res
+        .status(400)
+        .send({ message: 'Message received at endpoint /message is not valid' });
     }
   });
 };
