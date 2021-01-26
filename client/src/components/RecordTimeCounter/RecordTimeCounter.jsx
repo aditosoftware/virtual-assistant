@@ -4,7 +4,9 @@ const RecordTimeCounter = () => {
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
-    setTimeout(() => setSeconds(seconds + 1), 1000);
+    let isMounted = true; 
+    setTimeout(() => { if (isMounted) setSeconds(seconds + 1) }, 1000);
+    return () => { isMounted = false };
   }, [setSeconds, seconds]);
 
   return <div>00:{seconds > 9 ? seconds : "0" + seconds}</div>;
