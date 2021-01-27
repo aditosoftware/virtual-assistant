@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import moment from 'moment';
 import MediaStreamRecorder, { StereoAudioRecorder } from 'msr';
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@material-ui/core/IconButton';
 
 import InputIcon from '../InputIcon/InputIcon';
 import RecordIndicator from '../RecordIndicator/RecordIndicator';
@@ -15,11 +15,28 @@ const InputBar = ({ message, setMessage, sendMessage, iconType, setIconType }) =
   const [localStream, setLocalStream] = useState(null);
   const mediaConstraints = { audio: true };
 
+  const stopRecording = useCallback(() => {
+    if (recorder) recorder.stop(); // stops mediastreamrecorder
+
+    if (localStream) {
+      localStream.getTracks().forEach((track) => {
+        track.stop(); // stops capturing request (red dot in browser tab bar)
+      });
+      setLocalStream(null);
+    }
+  }, [localStream, recorder]);
+
   useEffect(() => {
     if (message.isAudioMessage && message.messageAudio) {
       sendMessage();
     }
   }, [message, sendMessage]);
+
+  useEffect(() => {
+    if (!isRecording) {
+      stopRecording();
+    }
+  }, [isRecording, stopRecording]);
 
   function onMediaSuccess(stream) {
     let audioRecorder = new MediaStreamRecorder(stream);
@@ -41,7 +58,10 @@ const InputBar = ({ message, setMessage, sendMessage, iconType, setIconType }) =
     };
 
     setRecorder(audioRecorder);
-    audioRecorder.start(59000); // * intervall in milliseconds after which ondataavailable gets triggerd - dialogflow only takes audio input to a max length of 1 minute
+    // * max length in milliseconds of audio message
+    // * dialogflow only takes audio input to a max length of 1 minute
+    // * recording process gets killed by RecordTimeCounter.jsx after 60 seconds
+    audioRecorder.start(60000);
   }
 
   function onMediaError(e) {
@@ -67,22 +87,28 @@ const InputBar = ({ message, setMessage, sendMessage, iconType, setIconType }) =
 
   return (
     <form className="chat-form">
-      {isRecording ? 
-      <div className="record-indicator-container">
-        <div className="record-indicator"><RecordIndicator /></div>
-        <div className="record-indicator-counter"><RecordTimeCounter/></div>
-      </div> : 
-      <input
-        className="input"
-        type="text"
-        placeholder={!isRecording ? "Schreibe eine Nachricht..." : ""}
-        value={message.messageText || ''}
-        onChange={handleChange}
-        onKeyPress={(event) =>
-          event.key === 'Enter' && message.messageText ? sendMessage(event) : null
-        }
-        disabled={isRecording}
-      />}
+      {isRecording ? (
+        <div className="record-indicator-container">
+          <div className="record-indicator">
+            <RecordIndicator />
+          </div>
+          <div className="record-indicator-counter">
+            <RecordTimeCounter setIsRecording={setIsRecording} />
+          </div>
+        </div>
+      ) : (
+        <input
+          className="input"
+          type="text"
+          placeholder={!isRecording ? 'Schreibe eine Nachricht...' : ''}
+          value={message.messageText || ''}
+          onChange={handleChange}
+          onKeyPress={(event) =>
+            event.key === 'Enter' && message.messageText ? sendMessage(event) : null
+          }
+          disabled={isRecording}
+        />
+      )}
       <IconButton
         className="input-button"
         type="submit"
@@ -95,15 +121,8 @@ const InputBar = ({ message, setMessage, sendMessage, iconType, setIconType }) =
             case 'audio':
               if (isRecording && recorder) {
                 // * stop recording - triggers ondataavailable
+                // * handling of recorder and localStream inside of useEffect (uses stopRecording())
                 setIsRecording(false);
-                recorder.stop(); // stops mediastreamrecorder
-
-                if (localStream) {
-                  localStream.getTracks().forEach((track) => {
-                    track.stop(); // stops capturing request (red dot in browser tab bar)
-                  });
-                  setLocalStream(null);
-                }
               } else if (!isRecording) {
                 // * start recording
                 setIsRecording(true);
