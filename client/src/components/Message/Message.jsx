@@ -9,11 +9,7 @@ const Message = ({ message, ttsEnabled, isPlaying, setIsPlaying }) => {
   let imageThumbnail = null;
   let displayMessageContent = null;
 
-  if (message.isMyMessage) {
-    messageClass += ' own-message';
-  } else {
-    messageClass += ' other-message';
-  }
+  message.isMyMessage ? (messageClass += ' own-message') : (messageClass += ' other-message');
 
   imageThumbnail = <img src={message.imageUrl} alt={message.imageAlt} />;
 
@@ -30,7 +26,15 @@ const Message = ({ message, ttsEnabled, isPlaying, setIsPlaying }) => {
     displayMessageContent = (
       <div className="message-content">
         {imageThumbnail}
-        <div className="message-text"><PlayPauseButton message={message} ttsEnabled={ttsEnabled} isPlaying={isPlaying} setIsPlaying={setIsPlaying} />{message.messageText}</div>
+        <div className="message-text">
+          <PlayPauseButton
+            message={message}
+            ttsEnabled={ttsEnabled}
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
+          />
+          {message.messageText}
+        </div>
         <div className="message-time">{message.createdAt}</div>
       </div>
     );

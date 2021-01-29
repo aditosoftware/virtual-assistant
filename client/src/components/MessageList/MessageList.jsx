@@ -10,10 +10,23 @@ const MessageList = ({ messages, ttsEnabled, isPlaying, setIsPlaying }) => {
     .slice(0)
     .reverse()
     .map((message, index) => {
-      return <Message key={index} message={message} ttsEnabled={ttsEnabled} isPlaying={isPlaying} setIsPlaying={setIsPlaying} />;
+      return (
+        <Message
+          key={index}
+          message={message}
+          ttsEnabled={ttsEnabled}
+          isPlaying={isPlaying}
+          setIsPlaying={setIsPlaying}
+        />
+      );
     });
 
-  return <div className="chat-message-list"><WritingIndicator/>{messageItems}</div>;
+  return (
+    <div className="chat-message-list">
+      <WritingIndicator />
+      {messageItems}
+    </div>
+  );
 };
 
 export default MessageList;

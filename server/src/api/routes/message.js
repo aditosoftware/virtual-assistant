@@ -15,8 +15,7 @@ module.exports = (app) => {
 
   router.get('/message', async (req, res) => {
     Logger.debug('GET /message');
-    let message = new Message();
-    res.send(message);
+    res.send(new Message());
   });
 
   // defines storage location and name of file

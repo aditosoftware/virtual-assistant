@@ -11,6 +11,7 @@ class Message {
     this.createdAt = null;
     this.aditoUserId = null;
     this.usertoken = null;
+    this.isPlaying = null;
   }
 
   // * init object with given data
@@ -25,6 +26,7 @@ class Message {
     this.createdAt = data.createdAt;
     this.aditoUserId = data.aditoUserId;
     this.usertoken = data.usertoken;
+    this.isPlaying = data.isPlaying;
   }
 
   // * fill an already existing object with the given fields
