@@ -94,7 +94,17 @@ const PlayPauseButton = ({ message, ttsEnabled, isPlaying, setIsPlaying }) => {
     let buffer = await ac.decodeAudioData(toArrayBuffer(message.messageAudio.data));
     let sound = createSound(buffer, ac);
 
-    message.isPlaying ? sound.pause() : sound.play();
+    if (message.isPlaying) {
+      // curr msg is playing -> pause clicked msg
+      sound.pause();
+    } else if (!message.isPlaying && isPlaying) {
+      // curr msg is not playing but some other msg is playing -> do nothing
+      return null;
+      // TODO: stop curr playing msg and play the clicked one
+    } else {
+      // curr msg and no other msg is curr playing -> play clicked msg
+      sound.play();
+    }
   };
 
   return (
