@@ -5,8 +5,6 @@ import PauseIcon from '@material-ui/icons/Pause';
 
 import { toArrayBuffer } from '../../utils';
 
-const iconStyle = { color: 'black', background: 'transparent' };
-
 const PlayPauseButton = ({ message, isPlaying, setIsPlaying }) => {
   const [ac, setAudioContext] = useState(null);
   const sourceNode = useRef(null);
@@ -123,8 +121,8 @@ const PlayPauseButton = ({ message, isPlaying, setIsPlaying }) => {
   }, [ac, message.messageAudio.data, message.ttsEnabled, createSound]);
 
   return (
-    <IconButton onClick={handleClick}>
-      {message.isPlaying ? <PauseIcon iconstyle={iconStyle} /> : <PlayIcon iconstyle={iconStyle} />}
+    <IconButton onClick={handleClick} color="inherit">
+      {message.isPlaying ? <PauseIcon /> : <PlayIcon />}
     </IconButton>
   );
 };
