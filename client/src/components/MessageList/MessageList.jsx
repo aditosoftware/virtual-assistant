@@ -5,19 +5,13 @@ import WritingIndicator from '../WritingIndicator/WritingIndicator';
 
 import './MessageList.css';
 
-const MessageList = ({ messages, ttsEnabled, isPlaying, setIsPlaying }) => {
+const MessageList = ({ messages, isPlaying, setIsPlaying }) => {
   const messageItems = messages
     .slice(0)
     .reverse()
     .map((message, index) => {
       return (
-        <Message
-          key={index}
-          message={message}
-          ttsEnabled={ttsEnabled}
-          isPlaying={isPlaying}
-          setIsPlaying={setIsPlaying}
-        />
+        <Message key={index} message={message} isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
       );
     });
 

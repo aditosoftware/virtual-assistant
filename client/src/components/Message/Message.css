@@ -56,15 +56,29 @@
 .own-message .message-text {
   border-radius: 14px 14px 0 14px;
 
-  color: #eee;
-  border: 1px solid #42a5f6;
-  background: #42a5f6;
+  color: #000;
+  border: 1px solid #e3eaf2;
+  background: #e3eaf2;
 }
 
 .other-message .message-text {
   border-radius: 14px 14px 14px 0;
 
-  color: #000;
-  border: 1px solid #e3eaf2;
-  background: #e3eaf2;
+  color: #eee;
+  /*border: 1px solid #42a5f6;*/
+  /*background: #e3eaf2;*/
+}
+
+.is-playing {
+  border: 1px solid #ed1652;
+  background: #ed1652;
+
+  transition: all 0.2s ease-in;
+}
+
+.is-not-playing {
+  border: 1px solid #42a5f6;
+  background: #42a5f6;
+
+  transition: all 0.2s ease-in;
 }

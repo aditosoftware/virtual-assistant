@@ -4,12 +4,15 @@ import PlayPauseButton from '../PlayPauseButton/PlayPauseButton';
 
 import './Message.css';
 
-const Message = ({ message, ttsEnabled, isPlaying, setIsPlaying }) => {
+const Message = ({ message, isPlaying, setIsPlaying }) => {
   let messageClass = 'message-row';
+  let messageTextClass = 'message-text';
   let imageThumbnail = null;
   let displayMessageContent = null;
 
   message.isMyMessage ? (messageClass += ' own-message') : (messageClass += ' other-message');
+
+  message.isPlaying ? (messageTextClass += ' is-playing') : (messageTextClass += ' is-not-playing');
 
   imageThumbnail = <img src={message.imageUrl} alt={message.imageAlt} />;
 
@@ -26,13 +29,8 @@ const Message = ({ message, ttsEnabled, isPlaying, setIsPlaying }) => {
     displayMessageContent = (
       <div className="message-content">
         {imageThumbnail}
-        <div className="message-text">
-          <PlayPauseButton
-            message={message}
-            ttsEnabled={ttsEnabled}
-            isPlaying={isPlaying}
-            setIsPlaying={setIsPlaying}
-          />
+        <div className={messageTextClass}>
+          <PlayPauseButton message={message} isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
           {message.messageText}
         </div>
         <div className="message-time">{message.createdAt}</div>

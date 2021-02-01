@@ -12,6 +12,7 @@ class Message {
     this.aditoUserId = null;
     this.usertoken = null;
     this.isPlaying = null;
+    this.ttsEnabled = null;
   }
 
   // * init object with given data
@@ -27,6 +28,7 @@ class Message {
     this.aditoUserId = data.aditoUserId;
     this.usertoken = data.usertoken;
     this.isPlaying = data.isPlaying;
+    this.ttsEnabled = data.ttsEnabled;
   }
 
   // * fill an already existing object with the given fields

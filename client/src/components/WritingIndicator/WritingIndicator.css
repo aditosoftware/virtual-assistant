@@ -10,14 +10,14 @@
   margin-left: 5px;
   border-radius: 14px 14px 14px 14px;
 
-  border: 1px solid #e3eaf2;
-  background: #e3eaf2;
+  border: 1px solid #42a5f6;
+  background: #42a5f6;
 }
 
 .writing-indicator-message {
   font-size: 1rem;
 
-  color: #777;
+  color: #eee;
 }
 
 .writing-indicator-loader {

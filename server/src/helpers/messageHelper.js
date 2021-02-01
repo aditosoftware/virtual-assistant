@@ -31,6 +31,7 @@ async function toMessage(response) {
       queryText: response.queryResult.queryText,
       createdAt: moment().format('HH:mm'),
       isPlaying: false,
+      ttsEnabled: false,
     };
 
     let message = new Message();

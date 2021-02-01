@@ -5,7 +5,7 @@ import { trackPromise } from 'react-promise-tracker';
 import MessageList from '../MessageList/MessageList';
 import InputBar from '../InputBar/InputBar';
 
-import { playOutput, toArrayBuffer, blobToFile } from '../../utils';
+import { blobToFile } from '../../utils';
 
 import './Chat.css';
 
@@ -57,13 +57,14 @@ const Chat = ({
   const sendMessage = async (event) => {
     if (event) event.preventDefault();
 
-    // prepare message object
+    // prepare message object (for backend)
     let messageInstance = message;
     messageInstance.imageUrl = `data:image/png;base64,${aditoUserImage.image}`;
     messageInstance.imageAlt = 'user';
     messageInstance.aditoUserId = aditoUserId;
     messageInstance.usertoken = usertoken;
     messageInstance.isPlaying = false;
+    messageInstance.ttsEnabled = ttsEnabled;
     setMessage(messageInstance);
 
     // audio message
@@ -78,10 +79,10 @@ const Chat = ({
       axios
         .post('http://localhost:5000/api/message', fd) // in start.sh localhost:5000 gets replaced with node server address
         .then((res) => {
+          // setting tts in message object - audio getting played in PlayPauseButton
+          ttsEnabled ? (res.data.ttsEnabled = true) : (res.data.ttsEnabled = false);
           // adding dialogflow response (already in chat message format) to messages
           setMessages((messages) => [...messages, res.data]);
-          // TODO: move auto tts to PlayPauseButton.jsx
-          if (ttsEnabled) playOutput(toArrayBuffer(res.data.messageAudio.data));
         })
         .catch((err) => {
           console.log(err);
@@ -107,12 +108,7 @@ const Chat = ({
 
   return (
     <div className="chat-container">
-      <MessageList
-        messages={messages}
-        ttsEnabled={ttsEnabled}
-        isPlaying={isPlaying}
-        setIsPlaying={setIsPlaying}
-      />
+      <MessageList messages={messages} isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
       <InputBar
         message={message}
         setMessage={setMessage}
