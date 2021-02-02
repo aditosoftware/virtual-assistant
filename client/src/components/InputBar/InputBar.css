@@ -2,7 +2,6 @@
   display: grid;
   grid-gap: 15px;
   grid-area: chat-form;
-  grid-template-columns: auto 5px;
   align-items: center;
   align-content: center;
 
@@ -14,6 +13,14 @@
 
   border: 2px solid rgba(0, 0, 0, 0.1);
   background: #fff;
+}
+
+.is-recording {
+  grid-template-columns: auto 25px 5px;
+}
+
+.is-not-recording {
+  grid-template-columns: auto 5px;
 }
 
 .chat-form input {

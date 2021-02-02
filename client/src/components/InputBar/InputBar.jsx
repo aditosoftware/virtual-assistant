@@ -2,6 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import moment from 'moment';
 import MediaStreamRecorder, { StereoAudioRecorder } from 'msr';
 import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import InputIcon from '../InputIcon/InputIcon';
 import RecordIndicator from '../RecordIndicator/RecordIndicator';
@@ -13,7 +14,19 @@ const InputBar = ({ message, setMessage, sendMessage, iconType, setIconType }) =
   const [recorder, setRecorder] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [localStream, setLocalStream] = useState(null);
+  const [deleteRecording, setDeleteRecording] = useState(false);
   const mediaConstraints = { audio: true };
+  const iconStyle = {
+    color: 'white',
+    background: '#42a5f6',
+    borderRadius: '7px',
+    height: '30px',
+    width: '30px',
+  };
+
+  let chatFormClass = 'chat-form';
+  if (isRecording) chatFormClass += ' is-recording';
+  else chatFormClass += ' is-not-recording';
 
   const stopRecording = useCallback(() => {
     if (recorder) recorder.stop(); // stops mediastreamrecorder
@@ -27,10 +40,10 @@ const InputBar = ({ message, setMessage, sendMessage, iconType, setIconType }) =
   }, [localStream, recorder]);
 
   useEffect(() => {
-    if (message.isAudioMessage && message.messageAudio) {
+    if (message.isAudioMessage && message.messageAudio && !deleteRecording) {
       sendMessage();
     }
-  }, [message, sendMessage]);
+  }, [message, sendMessage, deleteRecording]);
 
   useEffect(() => {
     if (!isRecording) {
@@ -38,7 +51,22 @@ const InputBar = ({ message, setMessage, sendMessage, iconType, setIconType }) =
     }
   }, [isRecording, stopRecording]);
 
-  function onMediaSuccess(stream) {
+  useEffect(() => {
+    if (deleteRecording) {
+      setMessage({
+        imageUrl: '',
+        imageAlt: '',
+        messageText: '',
+        messageAudio: null,
+        createdAt: '',
+        isMyMessage: null,
+        isAudioMessage: null,
+        queryText: '',
+      });
+    }
+  }, [setMessage, deleteRecording]);
+
+  const onMediaSuccess = (stream) => {
     let audioRecorder = new MediaStreamRecorder(stream);
     audioRecorder.mimeType = 'audio/wav';
     audioRecorder.recorderType = StereoAudioRecorder;
@@ -62,13 +90,13 @@ const InputBar = ({ message, setMessage, sendMessage, iconType, setIconType }) =
     // * dialogflow only takes audio input to a max length of 1 minute
     // * recording process gets killed by RecordTimeCounter.jsx after 60 seconds
     audioRecorder.start(60000);
-  }
+  };
 
-  function onMediaError(e) {
+  const onMediaError = (e) => {
     console.error(e);
     setIsRecording(false);
     alert(e.message);
-  }
+  };
 
   const handleChange = (event) => {
     setMessage({
@@ -86,7 +114,7 @@ const InputBar = ({ message, setMessage, sendMessage, iconType, setIconType }) =
   };
 
   return (
-    <form className="chat-form">
+    <form className={chatFormClass}>
       {isRecording ? (
         <div className="record-indicator-container">
           <div className="record-indicator">
@@ -109,11 +137,24 @@ const InputBar = ({ message, setMessage, sendMessage, iconType, setIconType }) =
           disabled={isRecording}
         />
       )}
+      {isRecording ? (
+        <IconButton
+          className="delete-recording-button"
+          onClick={(event) => {
+            event.preventDefault();
+            setDeleteRecording(true);
+            setIsRecording(false);
+          }}
+        >
+          <DeleteIcon style={iconStyle} />
+        </IconButton>
+      ) : null}
       <IconButton
         className="input-button"
         type="submit"
         onClick={(event) => {
           event.preventDefault();
+          setDeleteRecording(false);
           switch (iconType) {
             case 'text':
               sendMessage(event);
