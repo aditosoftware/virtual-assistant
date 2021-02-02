@@ -75,12 +75,13 @@ const Chat = ({
     fd.append('message', JSON.stringify(message));
     fd.append('audio', blobToFile(message.messageAudio, 'audio.wav'));
 
+    // track promise used to display writing indicator
     trackPromise(
       axios
         .post('http://localhost:5000/api/message', fd) // in start.sh localhost:5000 gets replaced with node server address
         .then((res) => {
           // setting tts in message object - audio getting played in PlayPauseButton
-          ttsEnabled ? (res.data.ttsEnabled = true) : (res.data.ttsEnabled = false);
+          res.data.ttsEnabled = ttsEnabled;
           // adding dialogflow response (already in chat message format) to messages
           setMessages((messages) => [...messages, res.data]);
         })
