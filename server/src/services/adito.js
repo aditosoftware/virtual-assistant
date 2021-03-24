@@ -41,7 +41,6 @@ async function send(aditoUserId, usertoken, dialogflowResponse) {
     return aditoResponse;
   } catch (err) {
     Logger.error(err);
-    // ? 401 should not occur with token auth
     let errResponse = new Response();
     let data = {
       responseId: null,
@@ -64,6 +63,7 @@ async function send(aditoUserId, usertoken, dialogflowResponse) {
     errResponse.initModel(data);
     switch (err.response.statusCode) {
       case 401:
+        // token auth for webservice not configured
         errResponse.queryResult.fulfillmentText =
           'Anfrage an ADITO-Server aufgrund fehlender oder ungültiger Authentifizierung abgelehnt';
         break;
@@ -102,8 +102,8 @@ async function getUserImage(aditoUserId) {
             config.ADITO_SERVER_REST_SERVICE_PATH +
             config.ADITO_SERVER_PICTURE_REST
         );
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        Logger.error(err);
       }
     })();
   } catch (err) {
