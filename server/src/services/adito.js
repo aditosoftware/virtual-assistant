@@ -40,6 +40,7 @@ async function send(aditoUserId, usertoken, dialogflowResponse) {
     Logger.debug('ADITO Service: Response received');
     return aditoResponse;
   } catch (err) {
+    // * server-side (adito) runtime error - e.g. function failed because of missing input handling, function not found, nullpointer exception etc.
     Logger.error(err);
     let errResponse = new Response();
     let data = {
@@ -51,9 +52,10 @@ async function send(aditoUserId, usertoken, dialogflowResponse) {
         parameters: null,
         allRequiredParamsPresent: true,
         fulfillmentText:
-          'Es ist ein Fehler aufgetreten - Fehlercode: ' +
+          'Whoops! Deine Anfrage war korrekt, dennoch ist während der Bearbeitung ein Fehler aufgetreten. Bitte kontaktiere einen Administrator.\nDetails: ' +
           err.response.statusCode +
-          ' - bitte kontaktieren Sie einen Administrator',
+          ' ' +
+          err.response.statusMessage,
         intent: {
           name: null,
           displayName: null,
